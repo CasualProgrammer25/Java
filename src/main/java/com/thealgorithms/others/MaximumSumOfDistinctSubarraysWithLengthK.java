@@ -61,6 +61,27 @@ public final class MaximumSumOfDistinctSubarraysWithLengthK {
             maxSum = currentSum;
         }
 
+        return slideWindowAndFindMaxSum(k, nums, maxSum, currentSum, frequencyMap);
+    }
+
+    /**
+     * Slides the window across the array and finds the maximum sum of subarrays
+     * with all distinct elements.
+     *
+     * This helper method iterates through the array starting from index k,
+     * maintaining a sliding window of size k. For each position, it removes the
+     * leftmost element and adds the new rightmost element, updating the maximum
+     * sum when all elements in the window are distinct.
+     *
+     * @param k           The size of the subarray
+     * @param nums        The input array
+     * @param maxSum      The current maximum sum
+     * @param currentSum  The sum of the first window
+     * @param frequencyMap The frequency map of the first window
+     * @return The maximum sum found while sliding the window
+     */
+    private static long slideWindowAndFindMaxSum(int k, int[] nums, long maxSum, long currentSum,
+            Map<Integer, Integer> frequencyMap) {
         // Slide the window across the array
         for (int i = k; i < nums.length; i++) {
             // Remove the leftmost element from the window

@@ -30,14 +30,19 @@ public final class PiNilakantha {
         double pi = 3;
         int divCounter = 2;
 
-        for (int i = 0; i < iterations; i++) {
-            if (i % 2 == 0) {
-                pi = pi + 4.0 / (divCounter * (divCounter + 1) * (divCounter + 2));
-            } else {
-                pi = pi - 4.0 / (divCounter * (divCounter + 1) * (divCounter + 2));
-            }
+        final double coefficient = 4.0;
+        final int divisor_increment = 2;
 
-            divCounter += 2;
+        for (int i = 0; i < iterations; i++) {
+            int divisor = divCounter * (divCounter + 1) * (divCounter + 2);
+            double termValue = coefficient / divisor;
+
+            if (i % 2 == 0) {
+                pi += termValue;
+            } else {
+                pi -= termValue;
+            }
+            divCounter += divisor_increment;
         }
         return pi;
     }

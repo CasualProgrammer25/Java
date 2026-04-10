@@ -21,34 +21,21 @@ public final class RabinKarp {
 
     public static List<Integer> search(String text, String pattern, int primeModulo) {
         List<Integer> occurrences = new ArrayList<>();
-        if (text == null || pattern == null || pattern.isEmpty()) {
+        if (!isValidInput(text, pattern)) {
             return occurrences;
         }
 
         int patternLength = pattern.length();
         int textLength = text.length();
-        int textHash = 0;
-        int patternHash = 0;
-        int highestPowerHash = 1;
-        int matchIndex;
-        int currentIndex;
 
-        if (patternLength > textLength) {
-            return new ArrayList<>();
-        }
+        int[] intializedVariables = calculateIntiaialVariables(text, pattern, primeModulo);
+        int patternHash = intializedVariables[0];
+        int textHash = intializedVariables[1];
+        int highestPowerHash = intializedVariables[2];
 
-        // highestPowerHash = pow(ALPHABET_SIZE, patternLength-1) % primeModulo
-        for (currentIndex = 0; currentIndex < patternLength - 1; currentIndex++) {
-            highestPowerHash = highestPowerHash * ALPHABET_SIZE % primeModulo;
-        }
-
-        for (currentIndex = 0; currentIndex < patternLength; currentIndex++) {
-            patternHash = (ALPHABET_SIZE * patternHash + pattern.charAt(currentIndex)) % primeModulo;
-            textHash = (ALPHABET_SIZE * textHash + text.charAt(currentIndex)) % primeModulo;
-        }
-
-        for (currentIndex = 0; currentIndex <= textLength - patternLength; currentIndex++) {
+        for (int currentIndex = 0; currentIndex <= textLength - patternLength; currentIndex++) {
             if (patternHash == textHash) {
+                int matchIndex;
                 for (matchIndex = 0; matchIndex < patternLength; matchIndex++) {
                     if (text.charAt(currentIndex + matchIndex) != pattern.charAt(matchIndex)) {
                         break;
@@ -71,4 +58,27 @@ public final class RabinKarp {
         }
         return occurrences;
     }
+
+    private static boolean isValidInput(String text, String pattern) {
+        return text != null && pattern != null && !pattern.isEmpty() && pattern.length() <= text.length();
+    }
+
+    private static int[] calculateIntiaialVariables(String text, String pattern, int primeModulo) {
+        int textHash = 0;
+        int patternHash = 0;
+        int highestPowerHash = 1;
+
+        // highestPowerHash = pow(ALPHABET_SIZE, patternLength-1) % primeModulo
+        for (int currentIndex = 0; currentIndex < pattern.length() - 1; currentIndex++) {
+            highestPowerHash = highestPowerHash * ALPHABET_SIZE % primeModulo;
+        }
+
+        for (int currentIndex = 0; currentIndex < pattern.length(); currentIndex++) {
+            patternHash = (ALPHABET_SIZE * patternHash + pattern.charAt(currentIndex)) % primeModulo;
+            textHash = (ALPHABET_SIZE * textHash + text.charAt(currentIndex)) % primeModulo;
+        }
+
+        return new int[]{patternHash, textHash, highestPowerHash};
+    }
 }
+

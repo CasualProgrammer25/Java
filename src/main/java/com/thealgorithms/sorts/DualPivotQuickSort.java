@@ -65,7 +65,8 @@ public class DualPivotQuickSort implements SortAlgorithm {
         int high = right - 1;
 
         while (low <= high) {
-            if (SortUtils.less(array[low], pivot1)) {
+            boolean isLessThanPivot1 = SortUtils.less(array[low], pivot1);
+            if (isLessThanPivot1) {
                 SortUtils.swap(array, low, pivot1End);
                 pivot1End++;
             } else if (SortUtils.greaterOrEqual(array[low], pivot2)) {
@@ -75,7 +76,7 @@ public class DualPivotQuickSort implements SortAlgorithm {
                 SortUtils.swap(array, low, high);
                 high--;
 
-                if (SortUtils.less(array[low], pivot1)) {
+                if (isLessThanPivot1) {
                     SortUtils.swap(array, low, pivot1End);
                     pivot1End++;
                 }

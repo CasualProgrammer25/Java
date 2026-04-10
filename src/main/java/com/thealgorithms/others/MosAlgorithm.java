@@ -67,29 +67,7 @@ public final class MosAlgorithm {
         for (Query query : queries) {
             // Expand or shrink the current range to match query range
 
-            // Expand right boundary
-            while (currentRight < query.right) {
-                currentRight++;
-                currentSum += arr[currentRight];
-            }
-
-            // Shrink right boundary
-            while (currentRight > query.right) {
-                currentSum -= arr[currentRight];
-                currentRight--;
-            }
-
-            // Expand left boundary
-            while (currentLeft < query.left) {
-                currentSum -= arr[currentLeft];
-                currentLeft++;
-            }
-
-            // Shrink left boundary
-            while (currentLeft > query.left) {
-                currentLeft--;
-                currentSum += arr[currentLeft];
-            }
+            adjustBoundariesForRangeSumQueries(query, currentSum, currentLeft, currentRight, arr);
 
             // Store the result
             query.result = currentSum;
@@ -102,6 +80,32 @@ public final class MosAlgorithm {
         }
 
         return results;
+    }
+
+    private static void adjustBoundariesForRangeSumQueries(Query query, int currentSum, int currentLeft, int currentRight, int[] arr) {
+        // Expand right boundary
+        while (currentRight < query.right) {
+            currentRight++;
+            currentSum += arr[currentRight];
+        }
+
+        // Shrink right boundary
+        while (currentRight > query.right) {
+            currentSum -= arr[currentRight];
+            currentRight--;
+        }
+
+        // Expand left boundary
+        while (currentLeft < query.left) {
+            currentSum -= arr[currentLeft];
+            currentLeft++;
+        }
+
+        // Shrink left boundary
+        while (currentLeft > query.left) {
+            currentLeft--;
+            currentSum += arr[currentLeft];
+        }
     }
 
     /**
@@ -131,37 +135,9 @@ public final class MosAlgorithm {
 
         // Process each query
         for (Query query : queries) {
-            // Expand right boundary
-            while (currentRight < query.right) {
-                currentRight++;
-                if (arr[currentRight] == targetValue) {
-                    currentCount++;
-                }
-            }
+            // Expand or shrink the current range to match query range
 
-            // Shrink right boundary
-            while (currentRight > query.right) {
-                if (arr[currentRight] == targetValue) {
-                    currentCount--;
-                }
-                currentRight--;
-            }
-
-            // Expand left boundary
-            while (currentLeft < query.left) {
-                if (arr[currentLeft] == targetValue) {
-                    currentCount--;
-                }
-                currentLeft++;
-            }
-
-            // Shrink left boundary
-            while (currentLeft > query.left) {
-                currentLeft--;
-                if (arr[currentLeft] == targetValue) {
-                    currentCount++;
-                }
-            }
+            adjustBoundariesForRangeFrequencyQueries(query, currentCount, currentLeft, currentRight, arr, targetValue);
 
             // Store the result
             query.result = currentCount;
@@ -174,6 +150,40 @@ public final class MosAlgorithm {
         }
 
         return results;
+    }
+
+    private static void adjustBoundariesForRangeFrequencyQueries(Query query, int currentCount, int currentLeft, int currentRight, int[] arr, int targetValue) {
+        // Expand right boundary
+        while (currentRight < query.right) {
+            currentRight++;
+            if (arr[currentRight] == targetValue) {
+                currentCount++;
+            }
+        }
+
+        // Shrink right boundary
+        while (currentRight > query.right) {
+            if (arr[currentRight] == targetValue) {
+                currentCount--;
+            }
+            currentRight--;
+        }
+
+        // Expand left boundary
+        while (currentLeft < query.left) {
+            if (arr[currentLeft] == targetValue) {
+                currentCount--;
+            }
+            currentLeft++;
+        }
+
+        // Shrink left boundary
+        while (currentLeft > query.left) {
+            currentLeft--;
+            if (arr[currentLeft] == targetValue) {
+                currentCount++;
+            }
+        }
     }
 
     /**

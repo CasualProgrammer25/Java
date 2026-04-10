@@ -13,7 +13,7 @@ public final class MagicSquare {
         Scanner sc = new Scanner(System.in);
         System.out.print("Input a number: ");
         int num = sc.nextInt();
-        if ((num % 2 == 0) || (num <= 0)) {
+        if (isInvalidMagicSquareSize(num)) {
             System.out.print("Input number must be odd and >0");
             System.exit(0);
         }
@@ -25,15 +25,31 @@ public final class MagicSquare {
         magicSquare[rowNum][colNum] = 1;
 
         for (int i = 2; i <= num * num; i++) {
-            if (magicSquare[(rowNum - 1 + num) % num][(colNum + 1) % num] == 0) {
-                rowNum = (rowNum - 1 + num) % num;
-                colNum = (colNum + 1) % num;
+            int nextRow = (rowNum - 1 + num) % num;
+            int nextCol = (colNum + 1) % num;
+
+            if (magicSquare[nextRow][nextCol] == 0) {
+                rowNum = nextRow;
+                colNum = nextCol;
             } else {
                 colNum = (colNum - 1 + num) % num;
             }
             magicSquare[rowNum][colNum] = i;
         }
 
+        printMagicSquare(magicSquare, num);
+
+        sc.close();
+    }
+
+    private static boolean isInvalidMagicSquareSize(int num) {
+        boolean isEvenNumber = (num % 2 == 0);
+        boolean isNonPositive = (num <= 0);
+        return isEvenNumber || isNonPositive;
+    }
+
+
+    public static void printMagicSquare(int[][] magicSquare, int num) {
         // print the square
         for (int i = 0; i < num; i++) {
             for (int j = 0; j < num; j++) {
@@ -47,6 +63,5 @@ public final class MagicSquare {
             }
             System.out.println();
         }
-        sc.close();
     }
 }
